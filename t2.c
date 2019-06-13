@@ -13,6 +13,20 @@ char * gera (FILE * myfp) {
   int count = 0;
   char* codigo = (char*)malloc(sizeof(char)*1000);
 
+/* CÓDIGO DE MÁQUINA PARA ABRIR ESPAÇO NA PILHA */  
+  codigo[count++] = 0x55;
+  codigo[count++] = 0x48;   
+  codigo[count++] = 0x89;
+  codigo[count++] = 0xe5;
+  codigo[count++] = 0x48;   
+  codigo[count++] = 0x83;
+  codigo[count++] = 0xec;
+  codigo[count++] = 0x20;                          	
+/*	push %rbp
+	movq %rsp, %rbp
+	subq $32, %rsp
+*/
+
   while ((c = fgetc(myfp)) != EOF) {
     switch (c) {
       case 'r': { /* retorno */
@@ -26,10 +40,17 @@ char * gera (FILE * myfp) {
 			for(int i = 0;i<4;i++){
 				codigo[count++] = (idx0>>(i*8)) & 0xff;  			
 			}
+			codigo[count++] = 0xc9;
+			codigo[count++] = 0xc3;
+			
+		case 'v':
+			codigo[count++] = 0x8b;
+			codigo[count++] = 0x45;
+			codigo[count++] = 0xff - 4*idx0;
+			codigo[count++] = 0xc9;
 			codigo[count++] = 0xc3;
 	}
-        break;
-	
+        break;	
       }
       case 'v': { /* atribuiÃ§Ã£o e op. aritmetica */
         int idx0, idx1;
@@ -40,8 +61,17 @@ char * gera (FILE * myfp) {
         if (c0 == '<') { /* atribuiÃ§Ã£o */
           if (fscanf(myfp, " %c%d", &var1, &idx1) != 2)
             error("comando invalido", line);
-          printf("%d %c%d < %c%d\n", line, var0, idx0, var1, idx1);
-        }
+	  switch(var1){
+	    case '$':
+		codigo[count++] = 0xc7;
+		codigo[count++] = 0x45;
+		codigo[count++] = 0xff - 4*idx0;
+		for(int i = 0;i<4;i++){
+				codigo[count++] = (idx1>>(i*8)) & 0xff;  			
+			}
+	    // A fazer: (atribuição de variavel para variavel) case 'v':		
+	  } 
+        }	
         else { /* operaÃ§Ã£o aritmÃ©tica */
           char var2, op;
           int idx2;
