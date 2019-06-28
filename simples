@@ -1,7 +1,8 @@
-v1 < $30
-v2 < $20
-v3 = v1 - v2
-v4 = v3 * $4 
-v5 < p1
-ret v4
-
+v1 < p1
+v2 < p2
+v3 < v1
+v3 = v3 - $5
+iflez v3 8
+v1 = v1 + v2
+ret v1
+ret $2

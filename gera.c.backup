@@ -108,7 +108,7 @@ funcp gera (FILE * myfp){
 					case 'v':/* retorno de variável (v) */
 						codigo[count++] = 0x8b;
 						codigo[count++] = 0x45;
-						codigo[count++] = 0xff - 4*idx0 + 1;
+						codigo[count++] = 0xff - 4*idx0;
 						codigo[count++] = 0xc9;
 						codigo[count++] = 0xc3;
 						break;
@@ -132,7 +132,7 @@ funcp gera (FILE * myfp){
 							case '$':/* atribuição de variável para constante */
 								codigo[count++] = 0xc7;
 								codigo[count++] = 0x45;
-								codigo[count++] = 0xff - 4*idx0 + 1;
+								codigo[count++] = 0xff - 4*idx0;
 
 								for(int i = 0;i<4;i++)
 								{
@@ -143,11 +143,11 @@ funcp gera (FILE * myfp){
 								codigo[count++] = 0x44;
 								codigo[count++] = 0x8b;
 								codigo[count++] = 0x55;
-								codigo[count++] = 0xff - idx1*4 + 1;
+								codigo[count++] = 0xff - idx1*4;
 								codigo[count++] = 0x44;
 								codigo[count++] = 0x89;
 								codigo[count++] = 0x55;
-								codigo[count++] = 0xff - idx0*4 + 1;
+								codigo[count++] = 0xff - idx0*4;
 								break;
 							case 'p':
 								codigo[count++] = 0x89;
@@ -163,7 +163,7 @@ funcp gera (FILE * myfp){
 										codigo[count++] = 0x55;
 										break;
 								}
-								codigo[count++] = 0xff - idx0*4 + 1;
+								codigo[count++] = 0xff - idx0*4;
 								break;			
 						}
 						break; 
@@ -194,13 +194,13 @@ funcp gera (FILE * myfp){
 
 							codigo[count++] = 0x89;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx0 + 1;
+							codigo[count++] = 0xff - 4*idx0;
 						}
 						else if (var1 == 'v' && var2 == '$')
 						{
 							codigo[count++] = 0x8b;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx1 + 1;
+							codigo[count++] = 0xff - 4*idx1;
 							codigo[count++] = 0x83;
 							codigo[count++] = 0xc0;
 
@@ -212,7 +212,7 @@ funcp gera (FILE * myfp){
 							count++;
 							codigo[count++] = 0x89;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx0 + 1;	
+							codigo[count++] = 0xff - 4*idx0;	
 						}
 						else if (var1 == '$' && var2 == 'v')
 						{
@@ -225,22 +225,22 @@ funcp gera (FILE * myfp){
 
 							codigo[count++] = 0x03;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx2 + 1;
+							codigo[count++] = 0xff - 4*idx2;
 							codigo[count++] = 0x89;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx0 + 1;
+							codigo[count++] = 0xff - 4*idx0;
 						}
 						else if (var1 == 'v' && var2 == 'v')
 						{
 							codigo[count++] = 0x8b;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx1 + 1;
+							codigo[count++] = 0xff - 4*idx1;
 							codigo[count++] = 0x03;	
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx2 + 1;
+							codigo[count++] = 0xff - 4*idx2;
 							codigo[count++] = 0x89;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx0 + 1;	
+							codigo[count++] = 0xff - 4*idx0;	
 						}
 						else
 						{
@@ -265,13 +265,13 @@ funcp gera (FILE * myfp){
 							count++;
 							codigo[count++] = 0x89;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx0 + 1;	
+							codigo[count++] = 0xff - 4*idx0;	
 						}
 						else if(var1 == 'v'&& var2 == '$')
 						{
 							codigo[count++] = 0x8b;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx1 + 1;
+							codigo[count++] = 0xff - 4*idx1;
 							codigo[count++] = 0x83;
 							codigo[count++] = 0xe8;
 							for(int i = 0; i<4; i++)
@@ -281,7 +281,7 @@ funcp gera (FILE * myfp){
 							count++;
 							codigo[count++] = 0x89;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx0 + 1;
+							codigo[count++] = 0xff - 4*idx0;
 						}
 						else if(var1 == '$' && var2 == 'v')
 						{
@@ -292,22 +292,22 @@ funcp gera (FILE * myfp){
 							}
 							codigo[count++] = 0x2b;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx2 + 1;
+							codigo[count++] = 0xff - 4*idx2;
 							codigo[count++] = 0x89;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx0 + 1;							
+							codigo[count++] = 0xff - 4*idx0;							
 						}
 						else if(var1 == 'v' && var2 == 'v')
 						{
 							codigo[count++] = 0x8b;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx1 + 1;
+							codigo[count++] = 0xff - 4*idx1;
 							codigo[count++] = 0x2b;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx2 + 1;
+							codigo[count++] = 0xff - 4*idx2;
 							codigo[count++] = 0x89;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx0 + 1;	
+							codigo[count++] = 0xff - 4*idx0;	
 						}
 						else
 						{
@@ -331,13 +331,13 @@ funcp gera (FILE * myfp){
 							count++;
 							codigo[count++] = 0x89;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx0 + 1;			
+							codigo[count++] = 0xff - 4*idx0;			
 						}
 						else if(var1 == 'v' && var2 == '$')
 						{
 							codigo[count++] = 0x8b;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx1 + 1;
+							codigo[count++] = 0xff - 4*idx1;
 							codigo[count++] = 0x6b;
 							codigo[count++] = 0xc0;
 							for(int i = 0; i<4; i++)
@@ -347,7 +347,7 @@ funcp gera (FILE * myfp){
 							count++;
 							codigo[count++] = 0x89;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx0 + 1;	
+							codigo[count++] = 0xff - 4*idx0;	
 						}
 						else if(var1 == '$' && var2 == 'v')
 						{
@@ -361,23 +361,23 @@ funcp gera (FILE * myfp){
 							codigo[count++] = 0x0f;
 							codigo[count++] = 0xaf;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx2 + 1;
+							codigo[count++] = 0xff - 4*idx2;
 							codigo[count++] = 0x89;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx0 + 1;	
+							codigo[count++] = 0xff - 4*idx0;	
 						}
 						else if(var1 == 'v' && var2 == 'v')
 						{
 							codigo[count++] = 0x8b;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx1 + 1;
+							codigo[count++] = 0xff - 4*idx1;
 							codigo[count++] = 0x0f;
 							codigo[count++] = 0xaf;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx2 + 1;
+							codigo[count++] = 0xff - 4*idx2;
 							codigo[count++] = 0x89;
 							codigo[count++] = 0x45;
-							codigo[count++] = 0xff - 4*idx0 + 1;	
+							codigo[count++] = 0xff - 4*idx0;	
 						}	
 						else 
 						{
@@ -402,7 +402,7 @@ funcp gera (FILE * myfp){
 				{
 					codigo[count++] = 0x8b;
 					codigo[count++] = 0x45;
-					codigo[count++] = 0xff - 4*idx0 + 1;
+					codigo[count++] = 0xff - 4*idx0;
 					codigo[count++] = 0xbb;
 					codigo[count++] = 0x00;
 					codigo[count++] = 0x00;

@@ -1,11 +1,9 @@
 #include <stdio.h>
-typedef int (*funcp) ();
+#include <stdlib.h>
+typedef int (*funcp) (int,int);
 funcp gera(FILE *f);
 
-
-int main (int argc, char** agrv) {
-  int line = 1;
-  int  c;
+int main () {
   funcp func;
   FILE *myfp;
   if ((myfp = fopen ("simples", "r")) == NULL) {
@@ -13,5 +11,5 @@ int main (int argc, char** agrv) {
     exit(1);
   }
   func = gera(myfp);
-  printf("%d \n",func());
+  printf("%d\n",func(6,3));
 }
