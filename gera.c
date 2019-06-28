@@ -69,7 +69,7 @@ while ((c = fgetc(myfp)) != EOF) {
 			int idx0, idx1;
         		char var0 = c, c0, var1;
         		if (fscanf(myfp, "%d %c", &idx0, &c0) != 2)
-				error("comando invalido", line);		
+				error("comando invalido", line);	
         		switch(c0){ /* atribuição */
 				case '<':{
           				if (fscanf(myfp, " %c%d", &var1, &idx1) != 2)
@@ -99,15 +99,204 @@ while ((c = fgetc(myfp)) != EOF) {
         			case '=':{ /*tratamento de operação aritmética */
           				char var2, op;
           				int idx2;
-          				if (c0 != '=')
-            					error("comando invalido", line);
-          				if (fscanf(myfp, " %c%d %c %c%d", &var1, &idx1, &op, &var2, &idx2) != 5)						
-            					error("comando invalido", line);    
-					break;				
-        			}
-      			}
-			break;
-		}
+          				
+          				if (fscanf(myfp, " %c%d %c %c%d", &var1, &idx1, &op, &var2, &idx2) == 5)						
+            					printf("%c%d %c %c%d %c %c%d \n",var0,idx0,c0,var1,idx1, op, var2, idx2);
+						switch(op){
+							case '+':
+								if(var1 == '$' && var2 == '$'){
+										codigo[count++] = 0xb8;
+										for(int i = 0;i<4;i++){
+											codigo[count++] = (idx1>>(i*8)) & 0xff;
+
+										}
+										codigo[count++] = 0x05;
+										for(int i = 0;i<4;i++){
+											codigo[count++] = (idx2>>(i*8)) & 0xff;
+
+										}
+										codigo[count++] = 0x89;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx0;
+										
+								}
+								else if(var1 == 'v' && var2 == '$'){
+										codigo[count++] = 0x8b;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx1;
+										codigo[count++] = 0x83;
+										codigo[count++] = 0xc0;
+										for(int i = 0; i<4; i++){
+											codigo[count+i] = (idx2>>(i*8)) & 0xff;
+										}
+										count++;
+										codigo[count++] = 0x89;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx0;	
+								}
+								else if(var1 == '$' && var2 == 'v'){
+										codigo[count++] = 0xb8;
+										for(int i = 0; i<4; i++){
+											codigo[count++] = (idx1>>(i*8)) & 0xff;
+										}
+										
+										codigo[count++] = 0x03;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx2;
+										codigo[count++] = 0x89;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx0;	
+										
+								}
+								else if(var1 == 'v' && var2 == 'v'){
+										codigo[count++] = 0x8b;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx1;
+										codigo[count++] = 0x03;	
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx2;
+										codigo[count++] = 0x89;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx0;	
+
+								}
+								else{
+									error("operação invalida",line);
+								}
+												
+					 			break;
+							case '-':
+								if(var1 == '$' && var2 == '$'){
+										codigo[count++] = 0xb8;
+										for(int i = 0;i<4;i++){
+											codigo[count++] = (idx1>>(i*8)) & 0xff;
+
+										}
+										codigo[count++] = 0x83;
+										codigo[count++] = 0xe8;
+										
+										for(int i = 0;i<4;i++){
+											codigo[count+i] = (idx2>>(i*8)) & 0xff;
+
+										}
+										count++;
+										codigo[count++] = 0x89;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx0;	
+												
+								}
+								else if(var1 == 'v'&& var2 == '$'){
+										codigo[count++] = 0x8b;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx1;
+										codigo[count++] = 0x83;
+										codigo[count++] = 0xe8;
+										for(int i = 0; i<4; i++){
+											codigo[count+i] = (idx2>>(i*8)) & 0xff;
+										}
+										count++;
+										codigo[count++] = 0x89;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx0;	
+										
+								}
+								else if(var1 == '$' && var2 == 'v'){
+										codigo[count++] = 0xb8;
+										for(int i = 0; i<4; i++){
+											codigo[count++] = (idx1>>(i*8)) & 0xff;
+										}
+										codigo[count++] = 0x2b;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx2;
+										codigo[count++] = 0x89;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx0;							
+								}
+								else if(var1 == 'v' && var2 == 'v'){
+										codigo[count++] = 0x8b;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx1;
+										codigo[count++] = 0x2b;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx2;
+										codigo[count++] = 0x89;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx0;	
+								}
+								else{
+									error("operação invalida",line);
+								}
+								break;
+							case '*':
+								if(var1 == '$' && var2 == '$'){
+										codigo[count++] = 0xb8;
+										for(int i = 0;i<4;i++){
+											codigo[count++] = (idx1>>(i*8)) & 0xff;
+
+										}
+										codigo[count++] = 0x6b;
+										codigo[count++] = 0xc0;
+										for(int i = 0;i<4;i++){
+											codigo[count+i] = (idx2>>(i*8)) & 0xff;
+
+										}
+										count++;
+										codigo[count++] = 0x89;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx0;			
+								}
+								else if(var1 == 'v' && var2 == '$'){
+										codigo[count++] = 0x8b;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx1;
+										codigo[count++] = 0x6b;
+										codigo[count++] = 0xc0;
+										for(int i = 0; i<4; i++){
+											codigo[count+i] = (idx2>>(i*8)) & 0xff;
+										}
+										count++;
+										codigo[count++] = 0x89;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx0;	
+										
+								}
+								else if(var1 == '$' && var2 == 'v'){
+										codigo[count++] = 0xb8;
+										for(int i = 0; i<4; i++){
+											codigo[count++] = (idx1>>(i*8)) & 0xff;
+										}
+										codigo[count++] = 0x0f;
+										codigo[count++] = 0xaf;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx2;
+										codigo[count++] = 0x89;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx0;	
+								}
+								else if(var1 == 'v' && var2 == 'v'){
+										codigo[count++] = 0x8b;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx1;
+										codigo[count++] = 0x0f;
+										codigo[count++] = 0xaf;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx2;
+										codigo[count++] = 0x89;
+										codigo[count++] = 0x45;
+										codigo[count++] = 0xff - 4*idx0;	
+								}	
+								else{
+									error("operação invalida",line);
+								}
+								break;
+						}   
+
+					 
+					break;			
+				}
+			}
+		break;
+	}
 		case 'i': { /*tratamento de desvio condicional */
         		char var0;
         		int idx0, n;
@@ -123,7 +312,7 @@ while ((c = fgetc(myfp)) != EOF) {
     line ++;
     fscanf(myfp, " ");
 }
-  //printar_codigo(codigo,count);
+  printar_codigo(codigo,count);
   return codigo;
 }
 

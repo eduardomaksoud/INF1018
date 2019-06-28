@@ -3,7 +3,7 @@ typedef int (*funcp) ();
 funcp gera(FILE *f);
 
 
-int main (void) {
+int main (int argc, char** agrv) {
   int line = 1;
   int  c;
   funcp func;
