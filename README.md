@@ -1,2 +1,2 @@
-# inf1018_trabalho2
-Compilador para linguagem (Simples)
+# INF1018
+Compilador para linguagem simples.
